@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Môi trường ảo (Virtual Environments)
+kiemtra/
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# SQLite Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Thư mục IDE và Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Anaconda / Conda
+.conda/
+
+# Khóa SSH / Chứng chỉ bảo mật
+*.pem
+*.key
+*.pub
+

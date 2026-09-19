@@ -109,8 +109,9 @@ app.include_router(students.router)
 # Route trang chủ UI
 @app.get("/", summary="Trang chủ giao diện Quản lý Sinh viên")
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="index.html")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=5175, reload=True)
+

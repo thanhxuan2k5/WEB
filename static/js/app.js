@@ -596,8 +596,129 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/'/g, "&#039;");
     }
 
+    // --- XỬ LÝ BIỂU ĐỒ CỘT SINH VIÊN NAM NỮ (Chart.js) ---
+    let genderChart = null;
+    const formGenderChart = document.getElementById('form-gender-chart');
+    const inputClassName = document.getElementById('input-class-name');
+    const inputMaleCount = document.getElementById('input-male-count');
+    const inputFemaleCount = document.getElementById('input-female-count');
+    const btnSyncRealData = document.getElementById('btn-sync-real-data');
+    const chartCanvas = document.getElementById('genderBarChart');
+
+    function initGenderChart(className = 'Lớp CNTT K17A', male = 28, female = 17) {
+        if (!chartCanvas || typeof Chart === 'undefined') return;
+
+        const ctx = chartCanvas.getContext('2d');
+        if (genderChart) {
+            genderChart.destroy();
+        }
+
+        genderChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Sinh viên Nam', 'Sinh viên Nữ'],
+                datasets: [{
+                    label: className,
+                    data: [male, female],
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.75)',  // Xanh dương cho Nam
+                        'rgba(220, 53, 69, 0.75)'    // Đỏ hồng cho Nữ
+                    ],
+                    borderColor: [
+                        'rgb(13, 110, 253)',
+                        'rgb(220, 53, 69)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    barPercentage: 0.55
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Inter', size: 13, weight: 'bold' }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` Số lượng: ${context.parsed.y} sinh viên`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 5,
+                            font: { family: 'Inter' }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Số lượng sinh viên'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { family: 'Inter', weight: 'bold' }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    if (formGenderChart) {
+        formGenderChart.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const className = inputClassName.value.trim() || 'Lớp học';
+            const male = parseInt(inputMaleCount.value) || 0;
+            const female = parseInt(inputFemaleCount.value) || 0;
+
+            initGenderChart(className, male, female);
+            showToast('success', `Đã cập nhật biểu đồ cột cho ${className}!`);
+        });
+    }
+
+    if (btnSyncRealData) {
+        btnSyncRealData.addEventListener('click', async () => {
+            try {
+                // Tải tất cả sinh viên từ API để đếm thực tế
+                const res = await fetch('/api/students?limit=200');
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const items = data.items || [];
+
+                let maleCount = 0;
+                let femaleCount = 0;
+                items.forEach(sv => {
+                    const g = (sv.gender || '').toLowerCase().trim();
+                    if (g === 'nam') maleCount++;
+                    else if (g === 'nữ' || g === 'nu') femaleCount++;
+                });
+
+                inputClassName.value = 'Dữ liệu hệ thống thực tế';
+                inputMaleCount.value = maleCount;
+                inputFemaleCount.value = femaleCount;
+
+                initGenderChart('Dữ liệu hệ thống thực tế', maleCount, femaleCount);
+                showToast('info', `Đã đồng bộ dữ liệu: ${maleCount} Nam, ${femaleCount} Nữ`);
+            } catch (err) {
+                showToast('error', 'Không thể đồng bộ dữ liệu');
+            }
+        });
+    }
+
     // --- KHỞI ĐỘNG BAN ĐẦU ---
     loadStats();
     loadMajors();
     loadStudents();
+    initGenderChart();
 });
+

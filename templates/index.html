@@ -107,6 +107,65 @@
             </div>
         </div>
 
+        <!-- Thống Kê Giới Tính Theo Lớp (Biểu Đồ Cột) -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-semibold text-dark d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-chart-column text-primary"></i> Thống Kê Sinh Viên Nam - Nữ Trong Lớp
+                </h5>
+                <span class="badge bg-primary-subtle text-primary fw-medium px-3 py-1 rounded-pill">
+                    <i class="fa-solid fa-chart-bar me-1"></i> Biểu đồ cột
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row g-4 align-items-center">
+                    <!-- Form Nhập Số Sinh Viên Nam Nữ Trong 1 Lớp -->
+                    <div class="col-12 col-lg-4">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <h6 class="fw-bold mb-3 text-secondary d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square text-primary"></i> Nhập số liệu lớp học
+                            </h6>
+                            <form id="form-gender-chart">
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium small">Tên lớp học</label>
+                                    <input type="text" id="input-class-name" class="form-control form-control-sm" placeholder="VD: CNTT K17A" value="Lớp CNTT K17A" required>
+                                </div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label fw-medium small text-primary">
+                                            <i class="fa-solid fa-mars me-1"></i> SV Nam
+                                        </label>
+                                        <input type="number" id="input-male-count" class="form-control form-control-sm" min="0" value="28" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label fw-medium small text-danger">
+                                            <i class="fa-solid fa-venus me-1"></i> SV Nữ
+                                        </label>
+                                        <input type="number" id="input-female-count" class="form-control form-control-sm" min="0" value="17" required>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-sm fw-medium">
+                                        <i class="fa-solid fa-chart-simple me-1"></i> Cập nhật biểu đồ
+                                    </button>
+                                    <button type="button" id="btn-sync-real-data" class="btn btn-outline-secondary btn-sm" title="Tự động đếm sinh viên Nam/Nữ thực tế từ danh sách">
+                                        <i class="fa-solid fa-rotate me-1"></i> Đếm từ dữ liệu bảng
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Khu vực hiển thị Biểu đồ cột -->
+                    <div class="col-12 col-lg-8">
+                        <div style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="genderBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Action Toolbar -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
@@ -443,6 +502,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- Custom JS -->
     <script src="/static/js/app.js"></script>
 </body>
